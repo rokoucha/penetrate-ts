@@ -1,0 +1,20 @@
+{
+  "author": "Rokoucha <git@rokoucha.net>",
+  "dependencies": {},
+  "description": "Let's make the strongest Dependency Injector only for you.",
+  "devDependencies": {
+    "prettier": "^2.1.1",
+    "typescript": "^4.0.2"
+  },
+  "license": "MIT",
+  "main": "dist/index.js",
+  "name": "penetrator-ts",
+  "repository": "ssh://git@github.com/rokoucha/penetrator-ts.git",
+  "scripts": {
+    "build": "tsc",
+    "dev": "yarn run tsc && yarn run start",
+    "fix": "prettier --write ./**/*.{json,md,ts}",
+    "start": "node ./dist/index.js"
+  },
+  "version": "1.0.0"
+}
