@@ -19,7 +19,7 @@ class ExampleClass {
 const exampleFunction = new Penetrable<
   [ExampleClass, Date],
   (hoge: string) => void
->(([instance, date], hoge) => {
+>(([instance, date], hoge: string): void => {
   console.log(hoge)
   console.log(instance.symbol())
   console.log(date.toISOString())

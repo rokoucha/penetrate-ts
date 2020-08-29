@@ -1,20 +1,28 @@
-export type PenetrableFunction<
-  D extends any[],
-  F extends (...args: any[]) => any
-> = (deps: D, ...args: Parameters<F>) => ReturnType<F>
+// Many thanks to @tosuke
+type Tail<T extends any[]> = T extends [any, ...infer Rest] ? Rest : never
 
-export class Penetrable<D extends any[], F extends (...args: any[]) => any> {
+type AnyFunction = (...args: any[]) => any
+
+export type PenetrableFunction<D extends any[], F extends AnyFunction> = (
+  deps: D,
+  ...args: Parameters<F>
+) => ReturnType<F>
+
+export class Penetrable<D extends any[], F extends AnyFunction> {
   #dependencies: D
   #target: PenetrableFunction<D, F>
 
   constructor(target: PenetrableFunction<D, F>) {
-    this.#target = target
     this.#dependencies = [] as any
+    this.#target = target as PenetrableFunction<D, typeof target>
   }
 
   penetrate(...dependencies: D) {
     this.#dependencies = dependencies
 
-    return (...args: Parameters<F>) => this.#target(this.#dependencies, ...args)
+    const target = this.#target
+
+    return (...args: Tail<Parameters<typeof target>>) =>
+      target(this.#dependencies, ...args)
   }
 }
