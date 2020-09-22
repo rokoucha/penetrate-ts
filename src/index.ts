@@ -1,31 +1,30 @@
-import { Penetrable } from './penetrator'
+/**
+ * penetrate-ts
+ * Copyright (c) 2020 Rokoucha
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
 
-class ExampleClass {
-  #name: string
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
-  constructor(name: string) {
-    this.#name = name
-  }
+import type { AnyFunction, Tail } from './utils'
 
-  log() {
-    console.log(this.#name)
-  }
+export type PenetrableFunction<D extends any[], F extends AnyFunction> = (
+  deps: D,
+  ...args: Parameters<F>
+) => ReturnType<F>
 
-  symbol() {
-    return Symbol(this.#name)
-  }
+export function Penetrable<D extends any[]>() {
+  return <F extends PenetrableFunction<D, AnyFunction>>(target: F) => (
+    ...dependencies: D
+  ) => (...args: Tail<Parameters<F>>): ReturnType<F> =>
+    target(dependencies, ...args)
 }
-
-const exampleFunction = new Penetrable<
-  [ExampleClass, Date],
-  (hoge: string) => void
->(([instance, date], hoge: string): void => {
-  console.log(hoge)
-  console.log(instance.symbol())
-  console.log(date.toISOString())
-})
-
-const exampleInstance = new ExampleClass('puyo')
-const exmapleDate = new Date()
-
-exampleFunction.penetrate(exampleInstance, exmapleDate)('hoge')
