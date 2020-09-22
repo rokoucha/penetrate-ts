@@ -9,7 +9,7 @@ Simplest DI container for TypeScript
 ## How to use
 
 ```ts
-import { Penetrable } from 'penetrable-ts'
+import { Penetrable } from 'penetrate-ts'
 
 // Define function and dependencies
 const getUnixtimeContainer = Penetrable<[Date]>()(
